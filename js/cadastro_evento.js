@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
     
     console.log("Script de eventos carregado!");
     
-    // Elementos do formulário
     const formulario = document.getElementById("formulario_evento");
     const btnCancelar = document.getElementById("btn_cancelar");
     const inputValor = document.getElementById("valor");
@@ -11,9 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const inputDataFim = document.getElementById("data_fim");
     const inputVagas = document.getElementById("vagas");
     
-    // FORMATAÇÃO DO CAMPO DE VALOR (TAXA DE INSCRIÇÃO) EM REAIS
     if (inputValor) {
-        // Formatar valor inicial se houver
         if (inputValor.value) {
             inputValor.value = formatarMoeda(inputValor.value);
         }
@@ -21,13 +18,10 @@ document.addEventListener("DOMContentLoaded", function () {
         inputValor.addEventListener("input", function (e) {
             let valor = e.target.value;
             
-            // Remove tudo que não é número
             valor = valor.replace(/\D/g, "");
             
-            // Converte para número e divide por 100 (para ter centavos)
             valor = (parseInt(valor) || 0) / 100;
             
-            // Formata como moeda brasileira
             e.target.value = valor.toLocaleString("pt-BR", {
                 style: "currency",
                 currency: "BRL"
@@ -35,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         
         inputValor.addEventListener("focus", function (e) {
-            // Remove R$ ao focar para facilitar edição
             let valor = e.target.value.replace(/\D/g, "");
             if (valor === "0" || valor === "") {
                 e.target.value = "";
@@ -43,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     
-    // Função auxiliar para formatar moeda
     function formatarMoeda(valor) {
         valor = valor.replace(/\D/g, "");
         valor = (parseInt(valor) || 0) / 100;
@@ -53,33 +45,27 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     
-    // FORMATAÇÃO DO CAMPO DE CARGA HORÁRIA (DURAÇÃO EM HORAS)
     if (inputCargaHoraria) {
         inputCargaHoraria.addEventListener("input", function (e) {
             let valor = e.target.value;
             
-            // Garante que seja apenas números positivos
             if (valor < 0) {
                 e.target.value = 1;
             }
         });
         
-        // Adiciona "hora(s)" ao lado do campo
         const labelCargaHoraria = document.querySelector('label[for="carga_horaria"]');
         if (labelCargaHoraria && !labelCargaHoraria.textContent.includes("horas")) {
             labelCargaHoraria.textContent = "Duração (em horas)";
         }
     }
     
-    // VALIDAÇÃO DE DATAS
     if (inputDataInicio && inputDataFim) {
-        // Define data mínima como hoje
         const hoje = new Date().toISOString().split("T")[0];
         inputDataInicio.min = hoje;
         inputDataFim.min = hoje;
         
         inputDataInicio.addEventListener("change", function () {
-            // Data de fim não pode ser anterior à data de início
             inputDataFim.min = inputDataInicio.value;
             
             if (inputDataFim.value && inputDataFim.value < inputDataInicio.value) {
@@ -96,26 +82,22 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     
-    // VALIDAÇÃO DE VAGAS
     if (inputVagas) {
         inputVagas.addEventListener("input", function (e) {
             let valor = e.target.value;
             
-            // Garante que seja apenas números positivos
             if (valor < 1) {
                 e.target.value = 1;
             }
         });
     }
     
-    // BOTÃO CANCELAR
     if (btnCancelar) {
         btnCancelar.addEventListener("click", function (e) {
             e.preventDefault();
             
             if (confirm("Tem certeza que deseja limpar todos os campos?")) {
                 formulario.reset();
-                // Limpa também o campo de valor formatado
                 if (inputValor) {
                     inputValor.value = "";
                 }
@@ -124,12 +106,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     
-    // SUBMISSÃO DO FORMULÁRIO
     if (formulario) {
         formulario.addEventListener("submit", function (e) {
             e.preventDefault();
             
-            // Coleta os dados do formulário
             const nome = document.getElementById("nome").value;
             const cargaHoraria = document.getElementById("carga_horaria").value;
             const valorBruto = inputValor.value.replace(/\D/g, "");
@@ -140,13 +120,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const dataFim = document.getElementById("data_fim").value;
             const descricao = document.getElementById("descricao").value;
             
-            // Validação final
             if (!tipoEvento) {
                 alert("Por favor, selecione um tipo de evento!");
                 return;
             }
             
-            // Cria objeto com os dados do evento
             const evento = {
                 id: "evento-" + Date.now(),
                 nome: nome,
@@ -162,30 +140,20 @@ document.addEventListener("DOMContentLoaded", function () {
             
             console.log("Evento cadastrado:", evento);
             
-            // Aqui você pode salvar no localStorage ou enviar para um servidor
             salvarEvento(evento);
             
-            // Mostra mensagem de sucesso
             alert("Evento cadastrado com sucesso!");
             
-            // Limpa o formulário
             formulario.reset();
-            
-            // Redireciona para a página inicial (opcional)
-            // window.location.href = "index.html";
         });
     }
     
-    // FUNÇÃO PARA SALVAR EVENTO NO LOCALSTORAGE
     function salvarEvento(evento) {
         try {
-            // Recupera eventos existentes
             let eventos = JSON.parse(localStorage.getItem("eventosCadastrados")) || [];
             
-            // Adiciona o novo evento
             eventos.push(evento);
             
-            // Salva de volta no localStorage
             localStorage.setItem("eventosCadastrados", JSON.stringify(eventos));
             
             console.log("Evento salvo no localStorage!");
@@ -197,7 +165,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
     
-    // FUNÇÃO PARA RECUPERAR EVENTOS (útil para outras páginas)
     function recuperarEventos() {
         try {
             return JSON.parse(localStorage.getItem("eventosCadastrados")) || [];
@@ -207,7 +174,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
     
-    // Exporta funções para uso global (opcional)
     window.EventosManager = {
         salvarEvento: salvarEvento,
         recuperarEventos: recuperarEventos

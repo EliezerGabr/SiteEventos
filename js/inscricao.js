@@ -1,9 +1,5 @@
-/* DOMContentLoaded */
 document.addEventListener("DOMContentLoaded", function() {
 
-    /* ============================
-       BANCO DE EVENTOS COM TIPOS
-       ============================ */
     const eventosPorTipo = {
         "VGC": [
             { id: 1, nome: "Premier Challenges", descricao: "Batalha 1x1, sendo MD3 de 50 minutos. Possui prêmio de participação e premiações para pódio.", vagas: 15, valor: 50 },
@@ -24,9 +20,6 @@ document.addEventListener("DOMContentLoaded", function() {
         ]
     };
 
-    /* ============================
-       ELEMENTOS DO FORM
-       ============================ */
     const selectTipo = document.getElementById("tipo_evento");
     const selectEvento = document.getElementById("select_evento");
     const containerFormulario = document.getElementById("container_formulario");
@@ -36,24 +29,18 @@ document.addEventListener("DOMContentLoaded", function() {
     infoDiv.classList.add("alert", "mt-3");
     containerFormulario.appendChild(infoDiv);
 
-    /* ============================
-       PRIMEIRO DROPDOWN — TIPO
-       ============================ */
     selectTipo.addEventListener("change", function () {
         const tipo = this.value;
 
-        // limpa o select de eventos
         selectEvento.innerHTML = "";
         selectEvento.disabled = false;
 
-        // mensagem inicial
         const optDefault = document.createElement("option");
         optDefault.textContent = "Selecione o evento";
         optDefault.disabled = true;
         optDefault.selected = true;
         selectEvento.appendChild(optDefault);
 
-        // popula o dropdown conforme o tipo
         eventosPorTipo[tipo].forEach(ev => {
             const opt = document.createElement("option");
             opt.value = ev.id;
@@ -61,18 +48,13 @@ document.addEventListener("DOMContentLoaded", function() {
             selectEvento.appendChild(opt);
         });
 
-        // limpa info
         infoDiv.className = "alert mt-3";
         infoDiv.innerHTML = "";
     });
 
-    /* ============================
-       SEGUNDO DROPDOWN — EVENTO
-       ============================ */
     selectEvento.addEventListener("change", function() {
         const eventoId = parseInt(this.value);
 
-        // procura evento dentro de todos os tipos
         let eventoSelecionado = null;
         for (const tipo in eventosPorTipo) {
             eventoSelecionado = eventosPorTipo[tipo].find(ev => ev.id === eventoId);
@@ -92,9 +74,6 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
     });
 
-    /* ============================
-       SUBMIT DO FORMULÁRIO
-       ============================ */
     form.addEventListener("submit", function(e) {
         e.preventDefault();
 
@@ -104,7 +83,6 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
 
-        // encontra o evento selecionado
         let evento = null;
         for (const tipo in eventosPorTipo) {
             evento = eventosPorTipo[tipo].find(ev => ev.id === eventoId);
@@ -125,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function() {
             Um e-mail de confirmação foi enviado para você.
         `;
         
-        // Limpa o formulário após 3 segundos
         setTimeout(function() {
             form.reset();
             selectEvento.innerHTML = "";
@@ -141,18 +118,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 3000);
     });
 
-    /* ============================
-       MÁSCARA DE CPF
-       ============================ */
     const cpfInput = document.getElementById("cpf");
 
     cpfInput.addEventListener("input", function () {
         this.value = this.value.replace(/\D/g, "").slice(0, 11);
     });
 
-    /* ============================
-       BOTÃO CANCELAR
-       ============================ */
     const btnCancelarInscricao = document.getElementById("btn_cancelar");
     
     if (btnCancelarInscricao) {
@@ -162,7 +133,6 @@ document.addEventListener("DOMContentLoaded", function() {
             if (confirm("Tem certeza que deseja limpar todos os campos?")) {
                 form.reset();
                 
-                // Limpa o select de eventos
                 selectEvento.innerHTML = "";
                 selectEvento.disabled = true;
                 const optDefault = document.createElement("option");
@@ -171,7 +141,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 optDefault.selected = true;
                 selectEvento.appendChild(optDefault);
                 
-                // Limpa a div de informações
                 infoDiv.className = "alert mt-3";
                 infoDiv.innerHTML = "";
                 

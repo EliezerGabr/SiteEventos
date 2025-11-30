@@ -1,19 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
     
-    // Variáveis globais
     const container = document.getElementById("lista-eventos");
     let cards = Array.from(document.querySelectorAll(".coluna-evento"));
     const selectOrdenar = document.getElementById("ordenar-eventos");
     const campoPesquisa = document.getElementById("campo-pesquisa");
     const salvar = "eventosFavoritos";
     
-    // Garantir que todos os cards comecem visíveis
     cards.forEach(card => {
         card.style.display = "block";
         card.classList.remove('hidden-by-search');
     });
     
-    // PAGINAÇÃO - Declarar primeiro
     const perPage = 4;
     let currentPage = 1;
     
@@ -24,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return Math.ceil(visibleCards.length / perPage);
     }
 
-    // Criar elementos de paginação
     const paginationContainer = document.createElement("div");
     paginationContainer.className = "d-flex justify-content-center align-items-center mt-4 mb-4";
     paginationContainer.id = "pagination-controls";
@@ -45,18 +41,15 @@ document.addEventListener("DOMContentLoaded", function () {
     paginationContainer.appendChild(pageInfo);
     paginationContainer.appendChild(nextBtn);
     
-    // Inserir paginação após o container de eventos
     container.parentNode.insertBefore(paginationContainer, container.nextSibling);
 
     function showPage(page) {
-        // Pega apenas os cards que devem estar visíveis (não filtrados pela pesquisa)
         const visibleCards = cards.filter(card => {
             return !card.classList.contains('hidden-by-search');
         });
         
         const totalPages = Math.ceil(visibleCards.length / perPage);
         
-        // Ajustar página se necessário
         if (page > totalPages && totalPages > 0) {
             page = totalPages;
             currentPage = totalPages;
@@ -65,26 +58,22 @@ document.addEventListener("DOMContentLoaded", function () {
         const start = (page - 1) * perPage;
         const end = start + perPage;
 
-        // Primeiro, esconde todos os cards
         cards.forEach(card => {
             card.style.display = "none";
         });
 
-        // Mostra apenas os cards da página atual
         visibleCards.forEach((card, index) => {
             if (index >= start && index < end) {
                 card.style.display = "block";
             }
         });
 
-        // Atualizar informações da página
         if (totalPages > 0) {
             pageInfo.textContent = `Página ${page} de ${totalPages}`;
         } else {
             pageInfo.textContent = "Nenhum evento encontrado";
         }
         
-        // Atualizar estado dos botões
         prevBtn.disabled = page === 1 || totalPages === 0;
         nextBtn.disabled = page === totalPages || totalPages === 0;
     }
@@ -106,7 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // CONTADOR DE TEMPO
     const itensTempo = document.querySelectorAll("[data-contador]");
 
     function atualizarContagem() {
@@ -136,7 +124,6 @@ document.addEventListener("DOMContentLoaded", function () {
     atualizarContagem();
     setInterval(atualizarContagem, 1000);
 
-    // PESQUISA
     if (campoPesquisa) {
         campoPesquisa.addEventListener("input", function () {
             const termo = campoPesquisa.value.toLowerCase();
@@ -155,7 +142,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // FAVORITOS
     function carregarFavoritos() {
         try {
             return JSON.parse(localStorage.getItem(salvar)) || [];
@@ -204,7 +190,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     atualizarIconesFavorito();
 
-    // ORDENAÇÃO
     function ordenarCards(tipo) {
         cards.sort(function (a, b) {
             const tituloA = (a.dataset.titulo || "").toLowerCase();
@@ -219,7 +204,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return 0;
         });
 
-        // Reordenar os cards no DOM
         cards.forEach(card => container.appendChild(card));
         
         currentPage = 1;
@@ -233,6 +217,5 @@ document.addEventListener("DOMContentLoaded", function () {
         ordenarCards(selectOrdenar.value);
     }
 
-    // Inicializar a primeira página
     showPage(currentPage);
 });

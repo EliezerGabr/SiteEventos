@@ -47,19 +47,16 @@
     <form action="" method="POST" name="formulario_inscricao" id="formulario_inscricao">
         <div class="row">
 
-            <!-- CPF -->
             <div class="mb-3 col-md-6">
                 <label for="cpf" class="form-label">CPF</label>
                 <input type="text" class="form-control" id="cpf" placeholder="Digite seu CPF" maxlength="11" required>
             </div>
 
-            <!-- Nome -->
             <div class="mb-3 col-12 col-md-6">
                 <label for="nome" class="form-label">Nome</label>
                 <input type="text" class="form-control" name="nome" id="nome" placeholder="Informe seu Nome Completo" required>
             </div>
 
-            <!-- Tipo de Evento -->
             <div class="mb-3 col-12 col-md-6">
                 <label for="tipo_evento" class="form-label">Tipo de Evento</label>
                 <select class="form-control" id="tipo_evento" required>
@@ -72,7 +69,6 @@
                 </select>
             </div>
 
-            <!-- Evento (populado dinamicamente) -->
             <div class="mb-3 col-12 col-md-6">
                 <label for="select_evento" class="form-label">Selecione o evento</label>
                 <select class="form-control" name="select_evento" id="select_evento" required disabled>
@@ -82,7 +78,6 @@
 
             <hr>
 
-            <!-- Botões -->
             <div class="col-12 text-center">
                 <button type="button" class="btn btn-danger" id="btn_cancelar">Cancelar</button>
                 <button type="submit" class="btn btn-success" id="btn_envia_formulario_inscricao">Fazer Inscrição</button>
